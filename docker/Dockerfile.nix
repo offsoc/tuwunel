@@ -68,13 +68,13 @@ RUN \
 EOF
 
 
-FROM build-nix AS nix-pkg
+FROM smoke-nix AS nix-pkg
 ARG sys_name
 ARG sys_version
 ARG sys_target
 
 WORKDIR /
-COPY --link --from=build-nix . .
+COPY --link --from=smoke-nix . .
 
 WORKDIR /usr/src/tuwunel
 RUN \
@@ -82,8 +82,12 @@ RUN \
 --mount=type=cache,dst=/root/.cache/nix,sharing=shared \
 --mount=type=cache,dst=/root/.local/state/nix,sharing=shared \
 <<EOF
-	set -eux
-    #TODO: extract derivation?
-    mkdir -p /opt/tuwunel
-    touch /opt/tuwunel/tuwunel.drv
+    set -eux
+
+    ID=$(nix-store --realise $(nix path-info --derivation))
+
+    mkdir tuwunel
+    nix-store --export $ID > tuwunel/tuwunel.drv
+    cp -afL /opt/tuwunel/bin/tuwunel tuwunel/tuwunel
+    tar -cvf /opt/tuwunel.nix.tar tuwunel
 EOF

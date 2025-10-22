@@ -963,6 +963,9 @@ target "nix" {
     inherits = [
         elem("build-nix", [sys_name, sys_version, sys_target]),
     ]
+    contexts = {
+        input = elem("target:build-nix", [sys_name, sys_version, sys_target]),
+    }
 }
 
 target "build-nix" {

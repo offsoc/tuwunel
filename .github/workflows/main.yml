@@ -41,7 +41,7 @@ jobs:
       package: ${{vars.PACKAGE || !contains(github.ref, 'refs/pull/')}}
       publish: ${{vars.PUBLISH || !contains(github.ref, 'refs/pull/')}}
       build_nix: ${{vars.BUILD_NIX || !contains(github.ref, 'refs/pull/')}}
-      build_pkgs: ${{vars.BUILD_PKGS || github.ref == 'refs/heads/main' || contains(github.ref, 'tags/v')}}
+      build_pkgs: ${{vars.BUILD_PKGS || github.ref == 'refs/heads/dev' || contains(github.ref, 'tags/v')}}
       check_pkgs: ${{vars.CHECK_PKGS || 'false'}}
       complement: ${{vars.COMPLEMENT || 'true'}}
       complement_runner: 'het'
